@@ -117,6 +117,7 @@ All endpoints except /register/ and /login/ require a JWT token.
 
 # 🧠 Database Schema
 
+```bash
 Tables:
 
 user (user_id, name, username, password, gender)
@@ -128,6 +129,9 @@ follower (follower_user_id, following_user_id)
 reply (reply_id, tweet_id, user_id, reply)
 
 like (like_id, tweet_id, user_id)
+
+```
+
 
 # 🧰 Example Requests
 # Register
