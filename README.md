@@ -96,14 +96,16 @@ POST	     /login/	    Login user and get JWT token
 |GET	       |  /user/tweets/feed/	   |  Get tweets from followed users |
 
 # 💬 Likes & Replies
-Method	  Endpoint	                  Description
-GET	      /tweets/:tweetId/likes/	    Get list of users who liked a tweet
-GET	      /tweets/:tweetId/replies/	  Get replies for a tweet
+|Method	  | Endpoint	        |          Description |
+|---------|-------------------|-----------------------|
+|GET	   |   /tweets/:tweetId/likes/	|    Get list of users who liked a tweet |
+|GET	      | /tweets/:tweetId/replies/	  | Get replies for a tweet |
 
 # 👥 Followers
-Method	        Endpoint	        Description
-GET	            /user/following/	Get list of following users
-GET	            /user/followers/	Get list of followers
+| Method	     |   Endpoint	    |    Description|
+|----------------|--------------|----------------|
+| GET	           | /user/following/ |	Get list of following users |
+| GET	           |  /user/followers/ |	Get list of followers |
 
 # 🔒 Authentication
 
