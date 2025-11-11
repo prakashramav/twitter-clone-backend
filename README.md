@@ -1,534 +1,182 @@
-# Twitter
+# 🐦 Twitter Clone Backend
 
-Given an `app.js` file and a database file `twitterClone.db` consisting of five tables `user`, `follower`, `tweet`, `reply`, and `like`.
+This is the **backend** for the Twitter Clone project built using **Node.js**, **Express.js**, and **SQLite** database.  
+It provides APIs for user authentication, tweets, followers, likes, and replies — simulating a simplified version of Twitter’s core features.
 
-Write APIs to perform operations on the tables `user`, `follower`, `tweet`, `reply`, and `like` containing the following columns,
+---
 
-**User Table**
+## 🚀 Features
 
-| Column   | Type    |
-| -------- | ------- |
-| user_id  | INTEGER |
-| name     | TEXT    |
-| username | TEXT    |
-| password | TEXT    |
-| gender   | TEXT    |
+- 👤 **User Authentication**
+  - Register new users with unique usernames
+  - Login using JWT-based authentication
 
-**Follower Table**
+- 🐦 **Tweets Management**
+  - Post new tweets
+  - View user tweets and feeds
+  - Delete user tweets
 
-| Column              | Type    |
-| ------------------- | ------- |
-| `follower_id`       | INTEGER |
-| `follower_user_id`  | INTEGER |
-| `following_user_id` | INTEGER |
+- 💬 **Replies and Likes**
+  - Like or reply to tweets
+  - View list of users who liked or replied
 
-Here, if user1 follows user2 then,
+- 👥 **Followers**
+  - Follow other users
+  - View followers and following lists
 
-`follower_user_id` is the user ID of user1 and `following_user_id` is the user ID of user2.
+- 🔐 **Secure Routes**
+  - Protected APIs using JSON Web Tokens (JWT)
+  - Only authenticated users can access tweet and follower data
 
-**Tweet Table**
+---
 
-| Column    | Type     |
-| --------- | -------- |
-| tweet_id  | INTEGER  |
-| tweet     | TEXT     |
-| user_id   | INTEGER  |
-| date_time | DATETIME |
+## 🛠️ Tech Stack
 
-**Reply Table**
+| Technology | Description |
+|-------------|-------------|
+| Node.js | JavaScript runtime environment |
+| Express.js | Web framework for Node.js |
+| SQLite | Lightweight relational database |
+| bcrypt | Password hashing |
+| jsonwebtoken | Authentication with JWT |
+| dotenv | Manage environment variables |
 
-| Column    | Type     |
-| --------- | -------- |
-| reply_id  | INTEGER  |
-| tweet_id  | INTEGER  |
-| reply     | TEXT     |
-| user_id   | INTEGER  |
-| date_time | DATETIME |
+---
 
-**Like Table**
+## 📁 Project Structure
 
-| Column    | Type     |
-| --------- | -------- |
-| like_id   | INTEGER  |
-| tweet_id  | INTEGER  |
-| user_id   | INTEGER  |
-| date_time | DATETIME |
 
-#### Sample Valid User Credentials
+twitter-clone-backend/
+│
+├── app.js # Main application file
+├── twitterClone.db # SQLite database
+├── package.json # Project dependencies
+├── .env # Environment variables (JWT secret, etc.)
+└── README.md # Project documentation
+
+
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/prakashramav/twitter-clone-backend.git
+cd twitter-clone-backend
+
+2. Install dependencies
+npm install
+
+3. Create .env file
+JWT_SECRET=your_secret_key
+PORT=3000
+
+4. Run the server
+npm start
+
+Server will start on:
+http://localhost:3000/
 
 ```
+
+# 🧩 API Endpoints
+# 🔑 Authentication
+Method	   Endpoint	    Description
+POST	     /register/	  Register a new user
+POST	     /login/	    Login user and get JWT token
+
+# 🐦 Tweets
+Method	      Endpoint	             Description
+GET	          /user/tweets/	         Get all tweets of logged-in user
+POST	        /user/tweets/	         Create a new tweet
+DELETE	      /tweets/:tweetId/	     Delete user’s tweet
+GET	         /user/tweets/feed/	     Get tweets from followed users
+
+# 💬 Likes & Replies
+Method	  Endpoint	                  Description
+GET	      /tweets/:tweetId/likes/	    Get list of users who liked a tweet
+GET	      /tweets/:tweetId/replies/	  Get replies for a tweet
+
+# 👥 Followers
+Method	        Endpoint	        Description
+GET	            /user/following/	Get list of following users
+GET	            /user/followers/	Get list of followers
+
+# 🔒 Authentication
+
+All endpoints except /register/ and /login/ require a JWT token.
+# Include token in headers:
+```bash
+ Authorization: Bearer <your_jwt_token>
+```
+
+# 🧠 Database Schema
+
+Tables:
+
+user (user_id, name, username, password, gender)
+
+tweet (tweet_id, tweet, user_id, date_time)
+
+follower (follower_user_id, following_user_id)
+
+reply (reply_id, tweet_id, user_id, reply)
+
+like (like_id, tweet_id, user_id)
+
+# 🧰 Example Requests
+# Register
+```bash
+POST /register/
+Content-Type: application/json
+
 {
-  "username":"JoeBiden",
-  "password":"biden@123"
-}
-```
-
-<Section id="section1" >
-
-### API 1
-
-#### Path: `/register/`
-
-#### Method: `POST`
-
-**Request**
-
-```
-{
-  "username": "adam_richard",
-  "password": "richard_567",
-  "name": "Adam Richard",
+  "username": "rahul",
+  "password": "rahul@2021",
+  "name": "Rahul",
   "gender": "male"
 }
 ```
 
-- **Scenario 1**
+# Login
+```bash
+POST /login/
+Content-Type: application/json
 
-  - **Description**:
-
-    If the username already exists
-
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      User already exists
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the registrant provides a password with less than 6 characters
-
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Password is too short
-      ```
-
-- **Scenario 3**
-
-  - **Description**:
-
-    Successful registration of the registrant
-
-  - **Response**
-
-    - **Status code**
-
-      ```
-      200
-      ```
-
-    - **Body**
-      ```
-      User created successfully
-      ```
-
-</Section>
-
-<Section id="section2">
-
-### API 2
-
-#### Path: `/login/`
-
-#### Method: `POST`
-
-**Request**
-
-```
 {
-  "username":"JoeBiden",
-  "password":"biden@123"
+  "username": "rahul",
+  "password": "rahul@2021"
 }
 ```
 
-- **Scenario 1**
 
-  - **Description**:
-
-    If the user doesn't have a Twitter account
-
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid user
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the user provides an incorrect password
-
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid password
-      ```
-
-- **Scenario 3**
-
-  - **Description**:
-
-    Successful login of the user
-
-  - **Response**
-
-    Return the JWT Token
-
-    ```
-    {
-      "jwtToken": "ak2284ns8Di32......"
-    }
-    ```
-
-</Section>
-
-<Section id="authToken">
-
-### Authentication with JWT Token
-
-Write a middleware to authenticate the JWT token.
-
-- **Scenario 1**
-
-  - **Description**:
-
-    If the JWT token is not provided by the user or an invalid JWT token is provided
-
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid JWT Token
-      ```
-
-- **Scenario 2**
-  - After successful verification of JWT token, proceed to next middleware or handler
-
-</Section>
-
-<Section id="section3">
-
-### API 3
-
-#### Path: `/user/tweets/feed/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns the latest tweets of people whom the user follows. Return 4 tweets at a time
-
-#### Response
-
-```
- [
-   {
-      username: "SrBachchan",
-      tweet: "T 3859 - do something wonderful, people may imitate it ..",
-      dateTime: "2021-04-07 14:50:19"
-   },
-   ...
- ]
+Response:
+```bash
+{ "jwtToken": "your_token_here" }
 ```
 
-</Section>
+# 🧑‍💻 Developer Notes
 
-<Section id="section4">
+Ensure SQLite DB file twitterClone.db exists in the root directory.
 
-### API 4
+Do not push .env or database files to GitHub.
 
-#### Path: `/user/following/`
+Update your JWT secret before deploying.
 
-#### Method: `GET`
+# 🤝 Contributing
 
-#### Description:
+Fork this repository
 
-Returns the list of all names of people whom the user follows
+Create a feature branch (git checkout -b feature-name)
 
-#### Response
+Commit your changes (git commit -m "Added new feature")
 
-```
-[
-  {
-    "name": "Narendra Modi"
-  },
-  ...
-]
-```
+Push to your branch (git push origin feature-name)
 
-</Section>
+Open a Pull Request
 
-<Section id="section5">
+# 📄 License
 
-### API 5
-
-#### Path: `/user/followers/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns the list of all names of people who follows the user
-
-#### Response
-
-```
-[
-  {
-    "name": "Narendra Modi"
-  },
-  ...
-]
-```
-
-</Section>
-
-<Section id="section6">
-
-### API 6
-
-#### Path: `/tweets/:tweetId/`
-
-#### Method: `GET`
-
-- **Scenario 1**
-
-  - **Description**:
-
-    If the user requests a tweet other than the users he is following
-
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid Request
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the user requests a tweet of the user he is following, return the tweet, likes count, replies count and date-time
-
-  - **Response**
-    ```
-    {
-       "tweet": "T 3859 - do something wonderful, people may imitate it ..",
-       "likes": 3,
-       "replies": 1,
-       "dateTime": "2021-04-07 14:50:19"
-    }
-    ```
-
-</Section>
-
-<Section id="section7">
-
-### API 7
-
-#### Path: `/tweets/:tweetId/likes/`
-
-#### Method: `GET`
-
-- **Scenario 1**
-
-  - **Description**:
-
-    If the user requests a tweet other than the users he is following
-
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid Request
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the user requests a tweet of a user he is following, return the list of usernames who liked the tweet
-
-  - **Response**
-    ```
-    {
-       "likes": ["albert", ]
-    }
-    ```
-
-</Section>
-
-<Section id="section8">
-
-### API 8
-
-#### Path: `/tweets/:tweetId/replies/`
-
-#### Method: `GET`
-
-- **Scenario 1**
-
-  - **Description**:
-
-    If the user requests a tweet other than the users he is following
-
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid Request
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the user requests a tweet of a user he is following, return the list of replies.
-
-  - **Response**
-
-        ```
-        {
-           "replies": [
-             {
-               "name": "Narendra Modi",
-               "reply": "When you see it.."
-              },
-            ...]
-        }
-        ```
-
-    </Section>
-
-<Section id="section9">
-
-### API 9
-
-#### Path: `/user/tweets/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns a list of all tweets of the user
-
-#### Response
-
-```
-[
-  {
-    "tweet": "Ready to don the Blue and Gold",
-    "likes": 3,
-    "replies": 4,
-    "dateTime": "2021-4-3 08:32:44"
-  },
-  ...
-]
-```
-
-</Section>
-
-<Section id="section10">
-
-### API 10
-
-#### Path: `/user/tweets/`
-
-#### Method: `POST`
-
-#### Description:
-
-Create a tweet in the tweet table
-
-#### Request
-
-```
-{
-   "tweet": "The Mornings..."
-}
-```
-
-#### Response
-
-```
-Created a Tweet
-```
-
-</Section>
-
-<Section id="section11">
-
-### API 11
-
-#### Path: `/tweets/:tweetId/`
-
-#### Method: `DELETE`
-
-- **Scenario 1**
-
-  - **Description**:
-
-    If the user requests to delete a tweet of other users
-
-  - **Response**
-    - **Status code**
-      ```
-      401
-      ```
-    - **Body**
-      ```
-      Invalid Request
-      ```
-
-- **Scenario 2**
-
-  - **Description**:
-
-    If the user deletes his tweet
-
-  - **Response**
-    ```
-    Tweet Removed
-    ```
-
-</Section>
-
-<br/>
-
-Use `npm install` to install the packages.
-
-**Export the express instance using the default export syntax.**
-
-**Use Common JS module syntax.**
+This project is licensed under the MIT License — feel free to use and modify.
