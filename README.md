@@ -88,11 +88,12 @@ POST	     /register/	  Register a new user
 POST	     /login/	    Login user and get JWT token
 
 # 🐦 Tweets
-Method	      Endpoint	             Description
-GET	          /user/tweets/	         Get all tweets of logged-in user
-POST	        /user/tweets/	         Create a new tweet
-DELETE	      /tweets/:tweetId/	     Delete user’s tweet
-GET	         /user/tweets/feed/	     Get tweets from followed users
+| Method	  |    Endpoint	       |      Description |
+|-----------|--------------------|-------------------|
+|GET	       |   /user/tweets/	 |        Get all tweets of logged-in user |
+|POST	       | /user/tweets/	     |    Create a new tweet |
+|DELETE	   |   /tweets/:tweetId/	 |    Delete user’s tweet  |
+|GET	       |  /user/tweets/feed/	   |  Get tweets from followed users |
 
 # 💬 Likes & Replies
 Method	  Endpoint	                  Description
